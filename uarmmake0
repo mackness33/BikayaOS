@@ -1,0 +1,34 @@
+# Cross toolchain variables
+# If these are not in your path, you can make them absolute.
+XT_PRG_PREFIX = arm-none-eabi-
+CC = $(XT_PRG_PREFIX)gcc
+LD = $(XT_PRG_PREFIX)ld
+
+# uARM-related paths
+UARM_DIR = /usr/include
+UARM_DATA_DIR = $(UARM_DIR)/uarm
+
+# Compiler options
+CFLAGS_LANG = 
+CFLAGS_UARM = -mcpu=arm7tdmi -DTARGET_UARM=1
+CFLAGS = $(CFLAGS_LANG) $(CFLAGS_UARM)  -I$(UARM_DIR)/uarm -Wall -O0
+
+# Linker options
+LDFLAGS = -G 0 -nostdlib -T $(UARM_DATA_DIR)/ldscripts/elf32ltsarm.h.uarmcore.x
+
+# Add the location of crt*.S to the search path
+VPATH = $(UARM_DATA_DIR)
+
+.PHONY : all clean
+
+all : kernel
+
+kernel : main.o printprint.o term.o crtso.o libuarm.o
+	$(LD) -o $@ $^ $(LDFLAGS)
+
+clean:
+	-rm -f kernel kernel.*.uarm *.uarm
+
+# Pattern rule for assembly modules
+%.o : %.s
+	$(CC) $(CFLAGS) -c -o $@ $<
