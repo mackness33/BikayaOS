@@ -30,6 +30,9 @@
 *.exe
 *.out
 *.app
+kernel
+kernel.core.umps
+kernel.stab.umps
 
 # Directories
 uARM

@@ -1,24 +1,33 @@
-#ifndef PCB_H
-#define PCB_H
-#include <types_bikaya.h>
-#include "const.h"
-
-#define memaddr MAX_PROC = 20;
-
-pcb_t *pcbFree;                 //: lista dei PCB che sono liberi o inutilizzati.
-pcb_t *pcbfree_h;               //: elemento sentinella della lista pcbFree.
-pcb_t pcbFree_table[MAX_PROC];  //: array di PCB con dimensione massima di MAX_PROC.
+#include "pcb.h"
 
 /* PCB handling functions */
-HIDDEN void initBack(pcb_t *p);
-void addBack(pcb_t *p);
+// need to alloc pcbFree_h then set next to NULL
+// then let pcbFree point to pcbFree_h
+void init(pcb_t *p){
+  pcbFree = NULL;
+  pcbFree_h->next = pcbFree;
+  pcbFree->next = pcbFree_h;
+}
+
+// can become a bool if needed it
+// TODO: either add to front and back
+void addBack(pcb_t *p){
+  if(!p)
+    return;
+}
 void addFront(pcb_t *p);
 bool isEmpty();
 pcb_t *getHead(void);
 pcb_t *getRear(void);
 
 /* PCB free list handling functions */
-void initPcbs(void);
+// TODO: Create a method for the inizialization of the array
+// TODO: Create a list class with all the we need for this.
+void initPcbs(void){
+  // FIRST: I need to inizialize all the pcb and put them in the array.
+  // NEXT:  Point all the list's pcb to the array.
+}
+
 void freePcb(pcb_t *p);
 pcb_t *allocPcb(void);
 
@@ -37,5 +46,3 @@ int emptyChild(pcb_t *this);
 void insertChild(pcb_t *prnt, pcb_t *p);
 pcb_t *removeChild(pcb_t *p);
 pcb_t *outChild(pcb_t *p);
-
-#endif
