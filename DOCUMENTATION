@@ -33,3 +33,14 @@ In questo modulo sono state seguite le indicazioni presenti all’interno della 
       °Rimozione del PCB puntato da p dalla lista dei figli del padre + restituzione di NULL in mancanza di padre, altrimenti restituzione di p 
    
 *************
+
+2- ASL.C
+
+Modulo per la gestione di una active semaphore list(ASL), che gestisce la coda dei processi bloccati su un semaforo
+
+5 FUNZIONI, DI CUI:
+  °Restituzione del puntatore al SEMD nella ASL, la cui chiave è pari a key. Se non esiste un elemento nella ASL con chiave uguale a key, viene restituito NULL
+  °Inserimento del PCB puntato da p nella coda dei processi bloccati associata al SEMD con chiave key - nel caso in cui il semaforo corrispondente non fosse presente nella ASL, verrebbe allocato un nuovo SEMD dalla lista semdFreee
+  ° Restituzione del primo PCB dalla coda dei processi bloccati (s_ProcQ) associata al SEMD della ASL con chiave key. Se il descrittore non esiste in ASL, restituzione di NULL, altrimenti restituzione dell'elemnto rimosso
+  °Rimozione del PCB puntato da p dalla coda del semaforo su cui è bloccato (indicato da p->p_semKey).  Se il PCB non compare in tale coda, allora restituisce NULL (condizione di errore). Altrimenti, restituisce p.
+  °Restituzione del puntatore al PCB che si trova in testa alla coda dei processi associata al SEMD con chiave key - restituisce NULL se SEMD non compare nella ASL o e compare ma la sua coda dei processi è vuota.
