@@ -32,7 +32,7 @@ VPATH = $(UMPS2_DATA_DIR)
 
 .PHONY : all clean
 
-all : kernel.core.umps
+all : kernel1.core.umps
 
 kernel.core.umps : kernel
 	umps2-elf2umps -k $<
@@ -40,8 +40,14 @@ kernel.core.umps : kernel
 kernel : main.o term.o printprint.o crtso.o libumps.o
 	$(LD) -o $@ $^ $(LDFLAGS)
 
+kernel1.core.umps : kernel1
+	umps2-elf2umps -k $<
+
+kernel1 : source/main1.o source/pcb.o source/asl.o source/p1test_bikaya_v0.o crtso.o libumps.o
+	$(LD) -o $@ $^ $(LDFLAGS)
+
 clean :
-	-rm -f kernel kernel.*.umps *.o umps/*.o *.umps
+	-rm -f kernel kernel.*.umps *.o umps/*.o *.umps source/*.o
 
 # Pattern rule for assembly modules
 %.o : %.S
