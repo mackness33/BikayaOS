@@ -1,0 +1,35 @@
+*************
+Scelte progettuali, eventuali modifiche effettuate nelle specifiche
+*************
+
+Sono stati creati due moduli separati: pcb.c e asl.c
+
+*************
+1 – PCB.C
+Modulo contente allocazione e deallocazione dei pcb oltre che gestione delle code e dell’albero dei PCB
+
+In questo modulo sono state seguite le indicazioni presenti all’interno della slide phase1_2020
+
+  - ALLOCAZIONE E DEALLOCAZIONE PCB
+    3 FUNZIONI, DI CUI:
+      °Inizializzazone pcbFree per contenere la pcbFree_Table
+      °Inserimento di un pcb puntato da p nella lista dei PCB liberi
+      °Valutazione di pcbFree - se vuota restitusce NULL, altrimenti avviene la rimozione di un elemento da pcbFree
+      
+   - GESTIONE CODE PBC
+     6 FUNZIONI, DI CUI:
+       °Inizializzazione elemento sentinella per la lista dei pcb
+       °Valutazione della lista puntata da head - se vuota restituisce TRUE, altrimenti FALSE
+       °Inserimento dell'elemento puntato da p nella coda dei processi puntata da head
+       °Valutazione coda dei processi da head - restituisce elemento di testa, altrimenti in mancanza di elementi viene retituito NULL
+       °Rimozione del primo elemento dalla coda dei processi puntata da head - restituisce NULL se la coda è vuota, altrimenti ritorna il puntatore all'elemento rimosso dalla lista
+       °Rimozione PCB puntato da p dalla coda dei processi puntata da head    
+
+  -GESTIONE ALBERO DEI PCB
+    4 FUNZIONI, DI CUI:
+      °Valutazione PCB punatato da p - se ha figli restituisce TRUE, altrimenti FALSE
+      °Inserimento del PCB puntato da p come figlio del PCB puntato da prnt
+      °Rimozione del primo figlio di PCB puntato da p + restituzione di NULL in mancanza di figli
+      °Rimozione del PCB puntato da p dalla lista dei figli del padre + restituzione di NULL in mancanza di padre, altrimenti restituzione di p 
+   
+*************
