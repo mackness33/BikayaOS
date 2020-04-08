@@ -32,61 +32,104 @@
  *
  */
 
-#ifndef P1TEST_BIKAYA_V0_H
-#define P1TEST_BIKAYA_V0_H
-
-#include "const.h"
-#include "listx.h"
+#include "../header/const.h"
+#include "../header/listx.h"
 
 #ifdef TARGET_UMPS
 #include "../umps/src/support/libumps/libumps.h"
 #include "../umps/src/include/umps/arch.h"
+// #include "../umps/arch.h"
 #endif
 #ifdef TARGET_UARM
 #include "../uarm/libuarm.h"
 #include "../uarm/arch.h"
 #endif
 
-#include "pcb.h"
-#include "asl.h"
+#include "../header/p1test_bikaya_v0.h"
+#include "../header/asl.h"
 
-#define MAXSEM MAXPROC
+#define ST_READY       1
+#define ST_BUSY        3
+#define ST_TRANSMITTED 5
 
-#define MAX_PCB_PRIORITY     10
-#define MIN_PCB_PRIORITY     0
-#define DEFAULT_PCB_PRIORITY 5
+#define CMD_ACK      1
+#define CMD_TRANSMIT 2
 
-char okbuf[2048]; /* sequence of progress messages */
-char errbuf[128]; /* contains reason for failing */
-char msgbuf[128]; /* nonrecoverable error message before shut down */
+#define CHAR_OFFSET      8
+#define TERM_STATUS_MASK 0xFF
 
-
-
-int     onesem;
-pcb_t * procp[MAXPROC], *p, *q, *maxproc, *minproc, *proc;
-semd_t *semd[MAXSEM];
-int     sem[MAXSEM + 1];
-
-struct list_head qa;
 
 /******************************************************************************
  * I/O Routines to write on a terminal
  ******************************************************************************/
 
 /* This function returns the terminal transmitter status value given its address */
-static unsigned int tx_status(termreg_t *tp);
+static unsigned int tx_status(termreg_t *tp) {
+    return ((tp->transm_status) & TERM_STATUS_MASK);
+}
 
 /* This function prints a string on specified terminal and returns TRUE if
  * print was successful, FALSE if not   */
-unsigned int termprint(char *str, unsigned int term);
+unsigned int termprint(char *str, unsigned int term) {
+    termreg_t *term_reg;
+
+    unsigned int stat;
+    unsigned int cmd;
+
+    unsigned int error = FALSE;
+
+    if (term < DEV_PER_INT) {
+        term_reg = (termreg_t *)DEV_REG_ADDR(IL_TERMINAL, term);
+
+        /* test device status */
+        stat = tx_status(term_reg);
+        if ((stat == ST_READY) || (stat == ST_TRANSMITTED)) {
+            /* device is available */
+
+            /* print cycle */
+            while ((*str != '\0') && (!error)) {
+                cmd                      = (*str << CHAR_OFFSET) | CMD_TRANSMIT;
+                term_reg->transm_command = cmd;
+
+                /* busy waiting */
+                while ((stat = tx_status(term_reg)) == ST_BUSY)
+                    ;
+
+                /* end of wait */
+                if (stat != ST_TRANSMITTED) {
+                    error = TRUE;
+                } else {
+                    /* move to next char */
+                    str++;
+                }
+            }
+        } else {
+            /* device is not available */
+            error = TRUE;
+        }
+    } else {
+        /* wrong terminal device number */
+        error = TRUE;
+    }
+
+    return (!error);
+}
+
 
 /* This function places the specified character string in okbuf and
  *	causes the string to be written out to terminal0 */
-void addokbuf(char *strp);
+void addokbuf(char *strp) {
+
+    termprint(strp, 0);
+}
+
 
 /* This function places the specified character string in errbuf and
  *	causes the string to be written out to terminal0.  After this is done
  *	the system shuts down with a panic message */
-void adderrbuf(char *strp);
+void adderrbuf(char *strp) {
 
-#endif
+    termprint(strp, 0);
+
+    PANIC();
+}

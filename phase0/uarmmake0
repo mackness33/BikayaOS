@@ -9,7 +9,7 @@ UARM_DIR = /usr/include
 UARM_DATA_DIR = $(UARM_DIR)/uarm
 
 # Compiler options
-CFLAGS_LANG =
+CFLAGS_LANG = 
 CFLAGS_UARM = -mcpu=arm7tdmi -DTARGET_UARM=1
 CFLAGS = $(CFLAGS_LANG) $(CFLAGS_UARM)  -I$(UARM_DIR)/uarm -Wall -O0
 
@@ -21,16 +21,13 @@ VPATH = $(UARM_DATA_DIR)
 
 .PHONY : all clean
 
-all : kernel1
+all : kernel
 
-kernel : phase0/main.o phase0/printprint.o phase0/term.o crtso.o libuarm.o
+kernel : main.o printprint.o term.o crtso.o libuarm.o
 	$(LD) -o $@ $^ $(LDFLAGS)
 
-kernel1 : phase1.0/source/main1.o phase1.0/source/pcb.o phase1.0/source/asl.o phase1.0/source/p1test_bikaya_v0.o crtso.o libuarm.o
-	$(LD) -o $@ $^ $(LDFLAGS)
-
-clean1:
-	-rm -f kernel1 kernel.*.uarm *.uarm phase1.0/source/*.o *.o
+clean:
+	-rm -f kernel kernel.*.uarm *.uarm
 
 # Pattern rule for assembly modules
 %.o : %.s

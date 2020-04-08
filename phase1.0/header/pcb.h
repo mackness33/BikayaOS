@@ -1,21 +1,8 @@
 #ifndef PCB_H
 #define PCB_H
-#include <types_bikaya.h>
-#include "const.h"
-
-#define memaddr MAX_PROC = 20;
-
-pcb_t *pcbFree;                 //: lista dei PCB che sono liberi o inutilizzati.
-pcb_t *pcbfree_h;               //: elemento sentinella della lista pcbFree.
-pcb_t pcbFree_table[MAX_PROC];  //: array di PCB con dimensione massima di MAX_PROC.
+#include "types_bikaya.h"
 
 /* PCB handling functions */
-HIDDEN void initBack(pcb_t *p);
-void addBack(pcb_t *p);
-void addFront(pcb_t *p);
-bool isEmpty();
-pcb_t *getHead(void);
-pcb_t *getRear(void);
 
 /* PCB free list handling functions */
 void initPcbs(void);

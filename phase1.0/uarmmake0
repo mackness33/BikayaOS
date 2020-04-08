@@ -21,16 +21,13 @@ VPATH = $(UARM_DATA_DIR)
 
 .PHONY : all clean
 
-all : kernel1
+all : kernel
 
-kernel : phase0/main.o phase0/printprint.o phase0/term.o crtso.o libuarm.o
+kernel : phase1.0/source/main1.o phase1.0/source/pcb.o phase1.0/source/asl.o phase1.0/source/p1test_bikaya_v0.o crtso.o libuarm.o
 	$(LD) -o $@ $^ $(LDFLAGS)
 
-kernel1 : phase1.0/source/main1.o phase1.0/source/pcb.o phase1.0/source/asl.o phase1.0/source/p1test_bikaya_v0.o crtso.o libuarm.o
-	$(LD) -o $@ $^ $(LDFLAGS)
-
-clean1:
-	-rm -f kernel1 kernel.*.uarm *.uarm phase1.0/source/*.o *.o
+clean:
+	-rm -f phase1.0/kernel phase1.0/kernel.*.uarm phase1.0/*.uarm phase1.0/source/*.o phase1.0/*.o
 
 # Pattern rule for assembly modules
 %.o : %.s
