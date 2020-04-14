@@ -51,9 +51,9 @@
 #define SYS3 3
 
 
-#define RAMBASE *((unsigned int *)0x10000000)
-#define RAMSIZE *((unsigned int *)0x10000004)
-#define RAMTOP (RAMBASE + RAMSIZE)
+// #define RAMBASE *((unsigned int *)0x10000000)
+// #define RAMSIZE *((unsigned int *)0x10000004)
+// #define RAMTOP (RAMBASE + RAMSIZE)
 
 
 /* Physical memory frame size */

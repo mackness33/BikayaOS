@@ -29,7 +29,7 @@ kernel : phase0/main.o phase0/printprint.o phase0/term.o crtso.o libuarm.o
 kernel1 : phase1.0/source/main1.o phase1.0/source/pcb.o phase1.0/source/asl.o phase1.0/source/p1test_bikaya_v0.o crtso.o libuarm.o
 	$(LD) -o $@ $^ $(LDFLAGS)
 
-kernel15:  source/main0.o crtso.o libuarm.o source/scheduler.o source/pcb.o source/asl.o source/interrupts.o source/scheduler.o source/syscall.o source/p15test_bikaya_v0.o source/utils.o
+kernel15:  source/main0.o crtso.o libuarm.o libdiv.o source/scheduler.o source/pcb.o source/asl.o source/interrupts.o source/scheduler.o source/syscall.o source/p15test_bikaya_v0.o source/utils.o
 	$(LD) -o $@ $^ $(LDFLAGS)
 
 clean1:

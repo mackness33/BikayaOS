@@ -1,6 +1,5 @@
-#include "../header/asl.h"
-#include "../header/pcb.h"
-#include "../header/const.h"
+#include "../header/header.h"
+
 
 HIDDEN semd_t semd_table[MAXPROC];
 HIDDEN struct list_head semdfree_h;

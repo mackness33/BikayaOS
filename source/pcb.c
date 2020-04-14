@@ -10,9 +10,7 @@
 #include "/usr/include/uarm/uARMtypes.h"
 #endif
 
-#include "../header/pcb.h"
-#include "../header/const.h"
-#include "../header/listx.h"
+#include "../header/header.h"
 
 /***************************************
 * MODULO DI PCB, INCLUDE:              *

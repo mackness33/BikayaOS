@@ -2,7 +2,7 @@
 
 #ifdef TARGET_UMPS
 
-void setProc(state_t* temp, int n){
+void setProcess(state_t* temp, int n){
 	/*settaggio registri*/
 	temp->status = (((0 | INT_MASK_TIME_ON) & VM_OFF) & KM_ON) | STATUS_TE;
 
@@ -26,14 +26,15 @@ void saveArea(state_t* new, state_t* old) {
 
 #ifdef TARGET_UARM
 
-void setProc(state_t* temp, int n){
+void setProcess(state_t* temp, int n){
 	/*settaggio registri*/
-	// temp->status = (((0 | INT_MASK_TIME_ON) & VM_OFF) & KM_ON) | STATUS_TE;
-  STATUS_ALL_INT_ENABLE(temp->cpsr);
-  CP15_DISABLE_VM(temp->CP15_Control);
+  // temp->status = (((0 | INT_MASK_TIME_ON) & VM_OFF) & KM_ON) | STATUS_TE;
+  newarea->cpsr = STATUS_SYS_MODE;
+  STATUS_ENABLE_TIMER(newarea->cpsr);
+  STATUS_ALL_INT_ENABLE(newarea->cpsr);
+  CP15_DISABLE_VM(newarea->CP15_Control);
 
   /*Assegnamento StackPointer*/
-
 	temp->sp = RAMTOP - FRAME_SIZE * n;
 }
 
@@ -66,24 +67,22 @@ void saveArea(state_t* new, state_t* old) {
 
 void cpuIdle(){
   /*Funzione idle che viene invocata quando non ci sono processi in esecuzione*/
-  // setSTATUS(getSTATUS() | STATUS_IEc | STATUS_INT_UNMASKED);
   setTIMER(3000);
 
   while(1) WAIT();
 }
 
+//Controlla che il processo passato non sia NULL, rimuove i processi figli dalla coda, mette a NULL il processo padre e richiama lo scheduler
 void KillProc(pcb_t *pcb){
-
-    if(pcb!=NULL){                        //Controlla che il processo passato non sia NULL, rimuove i processi figli
-        while(!emptyChild(pcb)){          //dalla coda, mette a NULL il processo padre e richiama lo scheduler
+    if(pcb!=NULL){
+        while(!emptyChild(pcb))
             KillProc(removeChild(pcb));
-        }
-        outChild(pcb);
-        if(pcb == ptr){
-            ptr = NULL;
-        }
 
-        outProcQ(&ready_queue, pcb);
+        outChild(pcb);
+        if(pcb == ptr)
+            ptr = NULL;
+
+        outProcQ(ready_queue, pcb);
         freePcb(pcb);
     }
 

@@ -1,7 +1,4 @@
-#include "../header/const.h"
-#include "../header/listx.h"
 #include "../header/header.h"
-#include "../header/pcb.h"
 
 #ifdef TARGET_UMPS
 #include "../umps/libumps.h"
@@ -53,7 +50,6 @@ static void delay_ms(unsigned int ms) {
  ******************************************************************************/
 
 #ifdef TARGET_UMPS
-static termreg_t *term0_reg = (termreg_t *)DEV_REG_ADDR(IL_TERMINAL, 0);
 
 static unsigned int tx_status(termreg_t *tp) {
     return ((tp->transm_status) & TERM_STATUS_MASK);

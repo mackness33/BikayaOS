@@ -5,8 +5,7 @@
 
 pcb_t *ptr,*temp;
 
-void initsched();
-void aging();
+void add_priority();
 void scheduler();
 
 #endif
