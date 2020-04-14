@@ -32,7 +32,7 @@ VPATH = $(UMPS2_DATA_DIR)
 
 .PHONY : all clean
 
-all : kernel1.core.umps
+all : kernel15.core.umps
 
 kernel.core.umps : kernel
 	umps2-elf2umps -k $<
@@ -45,6 +45,15 @@ kernel1.core.umps : kernel1
 
 kernel1 : source/main1.o source/pcb.o source/asl.o source/p1test_bikaya_v0.o crtso.o libumps.o
 	$(LD) -o $@ $^ $(LDFLAGS)
+
+kernel15.core.umps : kernel15
+	umps2-elf2umps -k $<
+
+kernel15:  source/main0.o crtso.o libumps.o source/scheduler.o source/pcb.o source/asl.o source/interrupts.o source/scheduler.o source/syscall.o source/p15test_bikaya_v0.o source/utils.o
+	$(LD) -o $@ $^ $(LDFLAGS)
+
+	# kernel15 : source/p15test_bikaya_v0.o source/main0.o source/pcb.o source/asl.o source/interrupts.o source/syscall.o source/scheduler.o source/utils.o crtso.o libumps.o
+
 
 clean :
 	-rm -f kernel kernel.*.umps *.o umps/*.o *.umps source/*.o

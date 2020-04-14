@@ -1,10 +1,10 @@
 #ifndef _CONST_H
 #define _CONST_H
 
-/**************************************************************************** 
+/****************************************************************************
  *
  * This header file contains the global constant & macro definitions.
- * 
+ *
  ****************************************************************************/
 
 /* Maxi number of overall (eg, system, daemons, user) concurrent processes */

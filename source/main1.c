@@ -10,7 +10,7 @@
 #include "/usr/include/uarm/arch.h"
 #endif
 
-#include "../header/p1test_bikaya_v0.h"
+#include "../header/p15test_bikaya_v0.h"
 #include "../header/pcb.h"
 #include "../header/asl.h"
 
